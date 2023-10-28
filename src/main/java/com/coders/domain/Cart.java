@@ -42,7 +42,6 @@ public class Cart {
     }
 
     public void addProduct(Product product) {
-        product.setCart(this);
         productList.add(product);
     }
 
