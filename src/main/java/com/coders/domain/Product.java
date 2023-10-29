@@ -18,15 +18,19 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public Product() {
+    }
+
+    public Product(BigDecimal name, String price, String quantity) {
+    }
+
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Product() {
     }
 
     public String getName() {
