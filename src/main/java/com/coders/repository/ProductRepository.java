@@ -9,6 +9,7 @@ import com.coders.helpers.ProductValidator;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ProductRepository {
@@ -24,7 +25,6 @@ public final class ProductRepository {
         productValidator = new ProductValidator();
     }
 
-
     public static ProductRepository getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new ProductRepository();
@@ -33,28 +33,25 @@ public final class ProductRepository {
     }
 
     public Product addProduct(Product product) throws TheSameNameException, NoDataException, InvalidTypeOfDataException, NotSuchElementException {
-        try {
-            productValidator.validate(product);
-            if (productMap.values().stream().anyMatch(prod -> prod.getName().equals(product.getName()))) {
-                throw new TheSameNameException("Product with the same name already exists: " + product.getName());
-            }
-            int productId = idGenerator.getAndIncrement();
-            product.setId(productId);
-            productMap.put(product.getId(), product);
-            return product;
-        } catch (NoDataException | NotSuchElementException | TheSameNameException | InvalidTypeOfDataException e) {
-            throw e;
-        }
+        productValidator.validate(product);
+        hasProductWithSameName(product);
+        int productId = idGenerator.getAndIncrement();
+        product.setId(productId);
+        productMap.put(product.getId(), product);
+        return product;
     }
 
     public Product getProductById(int id) throws NoDataException, NotSuchElementException {
-        try {
-            Product product = productMap.get(id);
-            productValidator.validate(product);
-            return product;
-        } catch (NoDataException | NotSuchElementException e) {
-            throw e;
-        }
+        return Optional.ofNullable(productMap.get(id))
+                .orElseThrow(() -> new NoDataException("No product found with ID: " + id));
+    }
+
+    public Product getProductByName(String name) throws NoDataException, NotSuchElementException {
+        Optional<Product> matchingProduct = productMap.values()
+                .stream()
+                .filter(product -> product.getName().equals(name))
+                .findFirst();
+        return matchingProduct.orElseThrow(() -> new NoDataException("No product found with NAME: " + name));
     }
 
     public Map<Integer, Product> getAllProducts() throws NoDataException {
@@ -65,13 +62,14 @@ public final class ProductRepository {
     }
 
     public Product removeProductByName(String name) throws NotSuchElementException {
-        Product product = productMap.get(0);
-        if (product == null) {
-            throw new NotSuchElementException("Product with name " + name + " not found.");
+        Product product = getProductByName(name);
+
+        if (product != null) {
+            productMap.values().removeIf(p -> p.getId() == product.getId());
+            return product;
+        } else {
+            throw new NotSuchElementException("No product found with name: " + name);
         }
-        productValidator.validate(product);
-        productMap.remove(name);
-        return product;
     }
 
     public Product removeProductById(int id) throws NotSuchElementException {
@@ -83,5 +81,11 @@ public final class ProductRepository {
 
     public void removeAllProducts() throws NoDataException {
         productMap.clear();
+    }
+
+    private boolean hasProductWithSameName(Product product) {
+        return productMap.values().stream()
+                .map(Product::getName)
+                .anyMatch(product.getName()::equals);
     }
 }
