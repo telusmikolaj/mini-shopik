@@ -34,7 +34,9 @@ public final class ProductRepository {
 
     public Product addProduct(Product product) throws TheSameNameException, NoDataException, InvalidTypeOfDataException, NotSuchElementException {
         productValidator.validate(product);
-        hasProductWithSameName(product);
+        if (hasProductWithSameName(product)) {
+            throw new TheSameNameException("Product with the same name already exists: " + product.getName());
+        };
         int productId = idGenerator.getAndIncrement();
         product.setId(productId);
         productMap.put(product.getId(), product);

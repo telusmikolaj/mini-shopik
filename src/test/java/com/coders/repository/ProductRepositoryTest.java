@@ -111,6 +111,6 @@ class ProductRepositoryTest {
 
     @Test
     void clearProductByNotFoundName() {
-        assertThrows(NotSuchElementException.class, () -> productRepository.removeProductByName("Product1000"));
+        assertThrows(NoDataException.class, () -> productRepository.removeProductByName("Product1000"));
     }
 }
