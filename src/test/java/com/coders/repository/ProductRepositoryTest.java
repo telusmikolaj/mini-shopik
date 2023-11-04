@@ -26,7 +26,7 @@ class ProductRepositoryTest {
 
     @Test
     void testAddProductWithValidData() {
-        Product product = new Product(1, "TestProduct", BigDecimal.valueOf(25), 50);
+        Product product = new Product("TestProduct", BigDecimal.valueOf(25), 50);
         productRepository.addProduct(product);
         Product retrievedProduct = productRepository.getProductById(product.getId());
         assertNotNull(retrievedProduct);
@@ -37,9 +37,9 @@ class ProductRepositoryTest {
 
     @Test
     void testAddProductWithTheSameName() throws InvalidTypeOfDataException, TheSameNameException, NoDataException {
-        Product product1 = new Product(2,"TestProduct", BigDecimal.valueOf(25), 50);
+        Product product1 = new Product("TestProduct", BigDecimal.valueOf(25), 50);
         assertDoesNotThrow(() -> productRepository.addProduct(product1));
-        Product product2 = new Product(2,"TestProduct", BigDecimal.valueOf(10), 40);
+        Product product2 = new Product("TestProduct", BigDecimal.valueOf(10), 40);
         assertThrows(TheSameNameException.class, () -> productRepository.addProduct(product2));
     }
 
@@ -51,7 +51,7 @@ class ProductRepositoryTest {
 
     @Test
     void testAddProductWithInvalidTypeOfData() throws NoDataException {
-        Product product = new Product(3, BigDecimal.valueOf(123), "one", "one");
+        Product product = new Product(BigDecimal.valueOf(123), "one", "one");
         assertThrows(NoDataException.class, () -> {
             productRepository.addProduct(product);
         });
@@ -59,7 +59,7 @@ class ProductRepositoryTest {
 
     @Test
     void getProductWithValidData() throws InvalidTypeOfDataException, TheSameNameException, NoDataException, NotSuchElementException {
-        Product product = new Product(4, "TestProduct2", BigDecimal.valueOf(25), 50);
+        Product product = new Product("TestProduct2", BigDecimal.valueOf(25), 50);
         productRepository.addProduct(product);
         Product retrievedProduct = productRepository.getProductById(product.getId());
         assertNotNull(retrievedProduct);
@@ -76,9 +76,9 @@ class ProductRepositoryTest {
 
     @Test
     void getAllProductsWithValidData() throws InvalidTypeOfDataException, TheSameNameException, NoDataException {
-        Product product1 = new Product(5,"Product1", BigDecimal.valueOf(10), 100);
-        Product product2 = new Product(6,"Product2", BigDecimal.valueOf(20), 50);
-        Product product3 = new Product(7,"Product3", BigDecimal.valueOf(15), 75);
+        Product product1 = new Product("Product1", BigDecimal.valueOf(10), 100);
+        Product product2 = new Product("Product2", BigDecimal.valueOf(20), 50);
+        Product product3 = new Product("Product3", BigDecimal.valueOf(15), 75);
 
         productRepository.addProduct(product1);
         productRepository.addProduct(product2);
@@ -102,7 +102,7 @@ class ProductRepositoryTest {
 
     @Test
     void clearProductWithValidData() {
-        Product product = new Product(8,"Product100", BigDecimal.valueOf(20), 50);
+        Product product = new Product("Product100", BigDecimal.valueOf(20), 50);
         productRepository.addProduct(product);
         Product removed = productRepository.removeProductById(product.getId());
         assertThrows(NotSuchElementException.class, () -> productRepository.removeProductById(6));

@@ -1,6 +1,7 @@
 package com.coders.helpers;
 
 import com.coders.domain.Product;
+import com.github.javafaker.IdNumber;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class ProductGenerator {
 
         price = price.setScale(2, BigDecimal.ROUND_HALF_UP);
         int quantity = MIN_QUANTITY + random.nextInt(MAX_QUANTITY - MIN_QUANTITY + 1);
-        return new Product(id, name, price, quantity);
+        return new Product(name, price, quantity);
     }
 
     public static List<Product> generateProducts(int count) {
