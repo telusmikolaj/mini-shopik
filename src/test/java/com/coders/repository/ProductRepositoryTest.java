@@ -1,33 +1,31 @@
 package com.coders.repository;
 
 import com.coders.domain.Product;
+import com.coders.exceptions.InvalidTypeOfDataException;
+import com.coders.exceptions.NoDataException;
+import com.coders.exceptions.NotSuchElementException;
+import com.coders.exceptions.TheSameNameException;
+import com.coders.helpers.ProductValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductRepositoryTest {
-
-    @Autowired
     private ProductRepository productRepository;
-
-    private Product newProduct;
-    private Product product1;
-    private Product product2;
-    private Map<Integer, Product> products;
+    private ProductValidator productValidator;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvalidTypeOfDataException, TheSameNameException, NoDataException, NotSuchElementException {
         productRepository = ProductRepository.getInstance();
+        productValidator = new ProductValidator();
     }
 
     @Test
-    void addProduct() {
+    void testAddProductWithValidData() {
         Product product = new Product("TestProduct", BigDecimal.valueOf(25), 50);
         productRepository.addProduct(product);
         Product retrievedProduct = productRepository.getProductById(product.getId());
@@ -38,21 +36,46 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void getProduct() {
-        Product product = new Product("TestProduct", BigDecimal.valueOf(25), 50);
-        productRepository.addProduct(product);
-
-        Product retrievedProduct = productRepository.getProductById(product.getId());
-
-        assertNotNull(retrievedProduct);
-        assertEquals(product.getId(), retrievedProduct.getId());
-        assertEquals(product.getName(), retrievedProduct.getName());
-        assertEquals(product.getPrice(), retrievedProduct.getPrice());
-        assertEquals(product.getQuantity(), retrievedProduct.getQuantity());
+    void testAddProductWithTheSameName() throws InvalidTypeOfDataException, TheSameNameException, NoDataException {
+        Product product1 = new Product("TestProduct", BigDecimal.valueOf(25), 50);
+        assertDoesNotThrow(() -> productRepository.addProduct(product1));
+        Product product2 = new Product("TestProduct", BigDecimal.valueOf(10), 40);
+        assertThrows(TheSameNameException.class, () -> productRepository.addProduct(product2));
     }
 
     @Test
-    void getAllProducts() {
+    void testAddProductWithNoData() throws NoDataException {
+        Product product = new Product();
+        assertThrows(NoDataException.class, () -> productRepository.addProduct(product));
+    }
+
+    @Test
+    void testAddProductWithInvalidTypeOfData() throws NoDataException {
+        Product product = new Product(BigDecimal.valueOf(123), "one", "one");
+        assertThrows(NoDataException.class, () -> {
+            productRepository.addProduct(product);
+        });
+    }
+
+    @Test
+    void getProductWithValidData() throws InvalidTypeOfDataException, TheSameNameException, NoDataException, NotSuchElementException {
+        Product product = new Product("TestProduct2", BigDecimal.valueOf(25), 50);
+        productRepository.addProduct(product);
+        Product retrievedProduct = productRepository.getProductById(product.getId());
+        assertNotNull(retrievedProduct);
+        assertEquals("TestProduct2", retrievedProduct.getName());
+        assertEquals(BigDecimal.valueOf(25), retrievedProduct.getPrice());
+        assertEquals(50, retrievedProduct.getQuantity());
+    }
+
+    @Test
+    void testGetProductWithNoData() throws NoDataException {
+        Product product = new Product();
+        assertThrows(NoDataException.class, () -> productRepository.addProduct(product));
+    }
+
+    @Test
+    void getAllProductsWithValidData() throws InvalidTypeOfDataException, TheSameNameException, NoDataException {
         Product product1 = new Product("Product1", BigDecimal.valueOf(10), 100);
         Product product2 = new Product("Product2", BigDecimal.valueOf(20), 50);
         Product product3 = new Product("Product3", BigDecimal.valueOf(15), 75);
@@ -64,7 +87,7 @@ class ProductRepositoryTest {
         Map<Integer, Product> allProducts = productRepository.getAllProducts();
 
         assertNotNull(allProducts);
-        assertEquals(3, allProducts.size());
+        assertEquals(5, allProducts.size());
 
         assertTrue(allProducts.containsKey(product1.getId()));
         assertTrue(allProducts.containsKey(product2.getId()));
@@ -72,19 +95,22 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void clearProductById() {
-        Product product1 = new Product("Product1", BigDecimal.valueOf(10), 100);
-        Product product2 = new Product("Product2", BigDecimal.valueOf(20), 50);
-        Product product3 = new Product("Product3", BigDecimal.valueOf(15), 75);
+    void getAllProductsWithNoData() {
+        productRepository.removeAllProducts();
+        assertThrows(NoDataException.class, () -> productRepository.getAllProducts());
+    }
 
-        productRepository.addProduct(product1);
-        productRepository.addProduct(product2);
-        productRepository.addProduct(product3);
+    @Test
+    void clearProductWithValidData() {
+        Product product = new Product("Product100", BigDecimal.valueOf(20), 50);
+        productRepository.addProduct(product);
+        Product removed = productRepository.removeProductById(product.getId());
+        assertThrows(NotSuchElementException.class, () -> productRepository.removeProductById(6));
 
-        productRepository.removeProductById(product2.getId());
+    }
 
-        assertNull(productRepository.getProductById(product2.getId()));
-        assertNotNull(productRepository.getProductById(product1.getId()));
-        assertNotNull(productRepository.getProductById(product3.getId()));
+    @Test
+    void clearProductByNotFoundName() {
+        assertThrows(NoDataException.class, () -> productRepository.removeProductByName("Product1000"));
     }
 }
