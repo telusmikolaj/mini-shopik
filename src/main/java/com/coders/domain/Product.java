@@ -12,7 +12,8 @@ public class Product {
 
     private Cart cart;
 
-    public Product(String name, BigDecimal price, int quantity) {
+    public Product(int id, String name, BigDecimal price, int quantity) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -21,9 +22,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(BigDecimal name, String price, String quantity) {
+    public Product(int id, BigDecimal bigDecimal, String one, String one1) {
     }
-
 
     public int getId() {
         return id;
