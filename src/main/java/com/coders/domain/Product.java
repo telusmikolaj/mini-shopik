@@ -12,16 +12,17 @@ public class Product {
 
     private Cart cart;
 
-    public Product(String name, BigDecimal price, int quantity) {
+    public Product(int id, String name, BigDecimal price, int quantity) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public Product() {
+    public Product(BigDecimal bigDecimal, String one, String one1) {
     }
 
-    public Product(BigDecimal bigDecimal, String one, String one1) {
+    public Product() {
     }
 
 
@@ -74,6 +75,7 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
