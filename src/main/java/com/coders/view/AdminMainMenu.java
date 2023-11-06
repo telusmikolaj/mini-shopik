@@ -51,7 +51,18 @@ public class AdminMainMenu extends Menu {
     }
 
     private void displayProducts() {
-
+//        ProductRepository productRepository = ProductRepository.getInstance();
+//        Map<Integer, Product> products = productRepository.getAllProducts();
+//
+//        if (products.isEmpty()) {
+//            System.out.println("Brak dostępnych produktów.");
+//        } else {
+//            System.out.println("Dostępne produkty:");
+//            for (Map.Entry<Integer, Product> entry : products.entrySet()) {
+//                Product product = entry.getValue();
+//                System.out.println(product);
+//            }
+//        }
     }
 
     private void addProduct() {
