@@ -36,7 +36,6 @@ public class ProductServiceTest {
         when(productRepository.getAllProducts()).thenReturn(productMap);
 
         Map<Integer, Product> allProductsFromService = productService.getAllProducts();
-        System.out.println(allProductsFromService);
         assertEquals(productMap, allProductsFromService);
     }
 

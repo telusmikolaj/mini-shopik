@@ -94,7 +94,6 @@ class ProductRepositoryTest {
         productRepository.addProduct(product3);
 
         Map<Integer, Product> allProducts = productRepository.getAllProducts();
-        System.out.println(allProducts);
         assertNotNull(allProducts);
         assertEquals(13, productRepository.getAllProducts().size() + fakeProductGenerator.generateFakeProducts(10).size());
 
