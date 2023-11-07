@@ -1,5 +1,11 @@
 package com.coders.view;
 
+import com.coders.domain.Product;
+import com.coders.repository.ProductRepository;
+import com.coders.service.ProductService;
+
+import java.util.Map;
+
 public class UserMainMenu extends Menu {
 
     @Override
@@ -50,9 +56,18 @@ public class UserMainMenu extends Menu {
     }
 
     private void displayProducts() {
-        // TODO
-        // 1. Pobieranie produktow z ProductService
-        // 2. wyświetlenie dostępnych produktów
+        ProductRepository productRepository = ProductRepository.getInstance();
+        Map<Integer, Product> products = productRepository.getAllProducts();
+
+        if (products.isEmpty()) {
+            System.out.println("Brak dostępnych produktów.");
+        } else {
+            System.out.println("Dostępne produkty:");
+            for (Map.Entry<Integer, Product> entry : products.entrySet()) {
+                Product product = entry.getValue();
+                System.out.println(product);
+            }
+        }
     }
 
     private void addToCart() {

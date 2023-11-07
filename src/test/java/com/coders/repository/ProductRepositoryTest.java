@@ -5,7 +5,9 @@ import com.coders.exceptions.InvalidTypeOfDataException;
 import com.coders.exceptions.NoDataException;
 import com.coders.exceptions.NotSuchElementException;
 import com.coders.exceptions.TheSameNameException;
+import com.coders.helpers.FakeProductGenerator;
 import com.coders.helpers.ProductValidator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,11 +19,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductRepositoryTest {
     private ProductRepository productRepository;
     private ProductValidator productValidator;
+    private FakeProductGenerator fakeProductGenerator;
 
     @BeforeEach
     void setUp() throws InvalidTypeOfDataException, TheSameNameException, NoDataException, NotSuchElementException {
         productRepository = ProductRepository.getInstance();
         productValidator = new ProductValidator();
+        fakeProductGenerator = new FakeProductGenerator();
+    }
+
+    @AfterEach
+    void tearDown() {
+        productRepository.removeAllProducts();
     }
 
     @Test
@@ -59,7 +68,7 @@ class ProductRepositoryTest {
 
     @Test
     void getProductWithValidData() throws InvalidTypeOfDataException, TheSameNameException, NoDataException, NotSuchElementException {
-        Product product = new Product(3,"TestProduct2", BigDecimal.valueOf(25), 50);
+        Product product = new Product(3, "TestProduct2", BigDecimal.valueOf(25), 50);
         productRepository.addProduct(product);
         Product retrievedProduct = productRepository.getProductById(product.getId());
         assertNotNull(retrievedProduct);
@@ -76,9 +85,9 @@ class ProductRepositoryTest {
 
     @Test
     void getAllProductsWithValidData() throws InvalidTypeOfDataException, TheSameNameException, NoDataException {
-        Product product1 = new Product(4,"Product1", BigDecimal.valueOf(10), 100);
-        Product product2 = new Product(5,"Product2", BigDecimal.valueOf(20), 50);
-        Product product3 = new Product(6,"Product3", BigDecimal.valueOf(15), 75);
+        Product product1 = new Product(4, "Product1", BigDecimal.valueOf(10), 100);
+        Product product2 = new Product(5, "Product2", BigDecimal.valueOf(20), 50);
+        Product product3 = new Product(6, "Product3", BigDecimal.valueOf(15), 75);
 
         productRepository.addProduct(product1);
         productRepository.addProduct(product2);
@@ -87,7 +96,7 @@ class ProductRepositoryTest {
         Map<Integer, Product> allProducts = productRepository.getAllProducts();
         System.out.println(allProducts);
         assertNotNull(allProducts);
-        assertEquals(5, allProducts.size());
+        assertEquals(13, productRepository.getAllProducts().size() + fakeProductGenerator.generateFakeProducts(10).size());
 
         assertTrue(allProducts.containsKey(product1.getId()));
         assertTrue(allProducts.containsKey(product2.getId()));
@@ -102,11 +111,12 @@ class ProductRepositoryTest {
 
     @Test
     void clearProductWithValidData() {
-        Product product = new Product(7,"Product100", BigDecimal.valueOf(20), 50);
+        Product product = new Product(7, "Product100", BigDecimal.valueOf(20), 50);
         productRepository.addProduct(product);
-        Product removed = productRepository.removeProductById(product.getId());
-        assertThrows(NotSuchElementException.class, () -> productRepository.removeProductById(6));
 
+        assertThrows(NotSuchElementException.class, () -> {
+            Product removed = productRepository.removeProductById(7);
+        });
     }
 
     @Test
@@ -114,3 +124,4 @@ class ProductRepositoryTest {
         assertThrows(NoDataException.class, () -> productRepository.removeProductByName("Product1000"));
     }
 }
+

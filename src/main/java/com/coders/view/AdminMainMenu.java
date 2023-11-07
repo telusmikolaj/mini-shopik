@@ -1,7 +1,12 @@
 package com.coders.view;
 
-public class AdminMainMenu extends Menu {
+import com.coders.domain.Product;
+import com.coders.repository.ProductRepository;
+import com.coders.service.ProductService;
 
+import java.util.Map;
+
+public class AdminMainMenu extends Menu {
 
     @Override
     public void display() {
@@ -51,18 +56,19 @@ public class AdminMainMenu extends Menu {
     }
 
     private void displayProducts() {
-//        ProductRepository productRepository = ProductRepository.getInstance();
-//        Map<Integer, Product> products = productRepository.getAllProducts();
-//
-//        if (products.isEmpty()) {
-//            System.out.println("Brak dostępnych produktów.");
-//        } else {
-//            System.out.println("Dostępne produkty:");
-//            for (Map.Entry<Integer, Product> entry : products.entrySet()) {
-//                Product product = entry.getValue();
-//                System.out.println(product);
-//            }
-//        }
+        ProductRepository productRepository = ProductRepository.getInstance();
+        ProductService productService = new ProductService(productRepository);
+        Map<Integer, Product> allProducts = productService.getAllProducts();
+
+        if (allProducts.isEmpty()) {
+            System.out.println("Brak dostępnych produktów.");
+        } else {
+            System.out.println("Dostępne produkty:");
+            for (Map.Entry<Integer, Product> entry : allProducts.entrySet()) {
+                Product product = entry.getValue();
+                System.out.println(product);
+            }
+        }
     }
 
     private void addProduct() {

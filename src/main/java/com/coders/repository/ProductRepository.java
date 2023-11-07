@@ -76,11 +76,13 @@ public final class ProductRepository {
 
     public Product removeProductById(int id) throws NotSuchElementException {
         Product product = productMap.get(id);
-        productValidator.validate(product);
-        productMap.remove(id);
-        return product;
-    }
-
+        if (product == null) {
+            throw new NotSuchElementException("Product not found with ID: " + id);
+        }
+            productValidator.validate(product);
+            productMap.remove(id);
+            return product;
+        }
     public void removeAllProducts() throws NoDataException {
         productMap.clear();
     }
