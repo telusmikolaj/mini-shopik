@@ -2,7 +2,6 @@ package com.coders.helpers;
 
 import com.coders.domain.Product;
 import com.coders.repository.ProductRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,11 +18,6 @@ class FakeProductGeneratorTest {
     void setUp() {
         productRepository = ProductRepository.getInstance();
         fakeProductGenerator = new FakeProductGenerator();
-    }
-
-    @AfterEach
-    void tearDown() {
-        productRepository.removeAllProducts();
     }
 
     @Test

@@ -9,5 +9,9 @@ public class Main {
         mainMenu.display();
         FakeProductGenerator fakeProductGenerator = new FakeProductGenerator();
         fakeProductGenerator.initProduct();
+//        AdminMainMenu adminMainMenu = new AdminMainMenu();
+//        adminMainMenu.display();
+
+
     }
 }
