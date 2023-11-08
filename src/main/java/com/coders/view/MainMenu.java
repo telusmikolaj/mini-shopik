@@ -1,5 +1,7 @@
 package com.coders.view;
 
+import com.coders.service.UserService;
+
 public class MainMenu extends Menu {
     @Override
     public void display() {
@@ -44,6 +46,7 @@ public class MainMenu extends Menu {
         // Jeśli tak, przechodzimy do głównego menu użytkownika
         // Jeśli nie, wyświetlamy odpowiedni komunikat i wracamy do menu logowania
 
+        UserService userService = new UserService();
         UserMainMenu userMainMenu = new UserMainMenu();
         userMainMenu.display();
 
