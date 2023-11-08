@@ -2,12 +2,16 @@ package com.coders.service;
 
 import com.coders.domain.Cart;
 import com.coders.domain.Product;
+import com.coders.helpers.FakeCartFactoryGenerator;
 
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartService {
     private final Cart cart;
+    private FakeCartFactoryGenerator fakeCartFactoryGenerator;
 
     public CartService(Cart cart) {
         this.cart = cart;
@@ -31,15 +35,24 @@ public class CartService {
     }
 
     public String viewCart(List<Product> productList) {
-        productList = cart.getProductList();
-        StringBuilder cartContent = new StringBuilder(String.format("%-20s | %-15s | %-15s\n", "Product", "Quantity", "Price"));
+        productList = new ArrayList<>();
+        FakeCartFactoryGenerator fakeCartFactoryGenerator = new FakeCartFactoryGenerator();
+        StringBuilder cartContent = new StringBuilder(String.format("ID: %d\nUser:\n   Username: %s\nProduct List:\n",
+                fakeCartFactoryGenerator.generateFakeCart().getId(),
+                fakeCartFactoryGenerator.generateFakeCart().getUser().getLogin()));
+
+
+        productList = fakeCartFactoryGenerator.generateFakeCart().getProductList();
         for (Product product : productList) {
-            String productName = String.format("%-20s", product.getName());
-            String quantity = String.format("%-15s", product.getQuantity());
-            String price = String.format("%-15s", product.getPrice());
-            cartContent.append(productName).append(" | ").append(quantity).append(" | ").append(price).append("\n");
+            cartContent.append(String.format("   Product ID: %d\n", product.getId()));
         }
         return cartContent.toString();
+    }
+
+    private String formatProducts(Product product) {
+        String formattedProduct = "Name: " + product.getName() + "\n";
+
+        return formattedProduct;
     }
 }
 
