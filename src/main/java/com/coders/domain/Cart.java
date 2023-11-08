@@ -1,27 +1,28 @@
 package com.coders.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Cart {
-    private Long id;
+    private int id;
     private User user;
     private List<Product> productList;
 
-    public Cart(Long id, User user, List<Product> productList) {
+    public Cart(int id, User user, List<Product> productList) {
         this.id = id;
         this.user = user;
-        this.productList = productList;
+        this.productList = new ArrayList<>();
     }
 
     public Cart() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

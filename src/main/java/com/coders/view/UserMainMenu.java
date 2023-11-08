@@ -1,12 +1,23 @@
 package com.coders.view;
 
+import com.coders.domain.Cart;
 import com.coders.domain.Product;
 import com.coders.repository.ProductRepository;
+import com.coders.service.CartService;
 import com.coders.service.ProductService;
 
+import java.util.List;
 import java.util.Map;
 
 public class UserMainMenu extends Menu {
+    private final Cart cart;
+    private final CartService cartService;
+    private List<Product> productList;
+
+    public UserMainMenu(Cart cart) {
+        this.cart = cart;
+        this.cartService = new CartService(cart);
+    }
 
     @Override
     public void display() {
@@ -72,16 +83,23 @@ public class UserMainMenu extends Menu {
     }
 
     private void addToCart() {
+//        System.out.print("Podaj ID produktu: ");
+//        int productId = scanner.nextInt();
+//        System.out.print("Podaj ilość: ");
+//        int quantity = scanner.nextInt();
+//        cartService.addToCart(productId, quantity);
+//        System.out.println("Produkt został dodany do koszyka.");
         // TODO
 
         // 1. Dodawanie do koszyka poprzez CartService
     }
 
-    private void viewCart() {
-        // TODO
-
-        // 1. wyświetlenie zawartości koszyka CartService
+    private String viewCart() {
+        String cartContent = cartService.viewCart(productList);
+        System.out.println(cartContent);
+        return cartContent;
     }
+
 
     private void removeFromCart() {
         // TODO
@@ -96,3 +114,4 @@ public class UserMainMenu extends Menu {
 
     }
 }
+

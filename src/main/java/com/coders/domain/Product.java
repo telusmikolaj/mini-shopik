@@ -3,14 +3,20 @@ package com.coders.domain;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Product {
+public class Product{
 
     private int id;
     private String name;
     private BigDecimal price;
     private int quantity;
-
     private Cart cart;
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 
     public Product(int id, String name, BigDecimal price, int quantity) {
         this.id = id;

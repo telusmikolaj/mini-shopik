@@ -1,17 +1,16 @@
 package com.coders;
 
+import com.coders.domain.Cart;
 import com.coders.helpers.FakeProductGenerator;
-import com.coders.service.ProductService;
-import com.coders.service.UserService;
-import com.coders.view.AdminMainMenu;
 import com.coders.view.MainMenu;
-import com.coders.view.UserMainMenu;
 
 public class Main {
     public static void main(String[] args) {
+        Cart cart = new Cart();
         FakeProductGenerator fakeProductGenerator = new FakeProductGenerator();
         fakeProductGenerator.initProduct();
         MainMenu mainMenu = new MainMenu();
         mainMenu.display();
+
     }
 }
