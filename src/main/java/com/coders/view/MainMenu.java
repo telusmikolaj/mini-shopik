@@ -1,8 +1,10 @@
 package com.coders.view;
 
-import com.coders.service.UserService;
+import com.coders.domain.Cart;
 
 public class MainMenu extends Menu {
+    private Cart cart;
+
     @Override
     public void display() {
         boolean continueLoop = true;
@@ -46,8 +48,7 @@ public class MainMenu extends Menu {
         // Jeśli tak, przechodzimy do głównego menu użytkownika
         // Jeśli nie, wyświetlamy odpowiedni komunikat i wracamy do menu logowania
 
-        UserService userService = new UserService();
-        UserMainMenu userMainMenu = new UserMainMenu();
+        UserMainMenu userMainMenu = new UserMainMenu(cart);
         userMainMenu.display();
 
     }
